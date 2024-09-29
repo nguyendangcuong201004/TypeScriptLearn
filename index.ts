@@ -3,20 +3,19 @@ import env from "dotenv";
 env.config();
 
 import { connect } from './config/database';
+import routerApiV1 from './v1/routes/index.route';
+import bodyParser  from 'body-parser';
+import cors from "cors"
 connect()
-import Task from './models/task.model'
+
 
 const app: Express = express();
 const port: (number | string) = process.env.PORT || 3000;
 
-app.get('/tasks', async (req: Request, res: Response) => {
+app.use(cors())
+app.use(bodyParser.json())
 
-    const tasks = await Task.find({
-        deleted: false,
-    })
-
-    res.json(tasks)
-})
+routerApiV1(app)
 
 app.listen(port, () => {
     console.log(`Chay tren cong ${port}`);
